@@ -24,6 +24,9 @@
 #include "bootloader_common.h"
 #include "sdkconfig.h"
 #include "esp_image_format.h"
+#include "soc/gpio_struct.h"
+#include "soc/io_mux_reg.h"
+#include "soc/gpio_sig_map.h"
 
 static const char* TAG = "boot";
 
@@ -36,6 +39,59 @@ static int selected_boot_partition(const bootloader_state_t *bs);
  */
 void __attribute__((noreturn)) call_start_cpu0()
 {
+	//	Set GPIO 0 to low level ASAP.
+    const uint32_t GPIO_PIN_MUX_REG[GPIO_PIN_COUNT] = {
+        IO_MUX_GPIO0_REG,
+        IO_MUX_GPIO1_REG,
+        IO_MUX_GPIO2_REG,
+        IO_MUX_GPIO3_REG,
+        IO_MUX_GPIO4_REG,
+        IO_MUX_GPIO5_REG,
+        IO_MUX_GPIO6_REG,
+        IO_MUX_GPIO7_REG,
+        IO_MUX_GPIO8_REG,
+        IO_MUX_GPIO9_REG,
+        IO_MUX_GPIO10_REG,
+        IO_MUX_GPIO11_REG,
+        IO_MUX_GPIO12_REG,
+        IO_MUX_GPIO13_REG,
+        IO_MUX_GPIO14_REG,
+        IO_MUX_GPIO15_REG,
+        IO_MUX_GPIO16_REG,
+        IO_MUX_GPIO17_REG,
+        IO_MUX_GPIO18_REG,
+        IO_MUX_GPIO19_REG,
+        0,
+        IO_MUX_GPIO21_REG,
+        IO_MUX_GPIO22_REG,
+        IO_MUX_GPIO23_REG,
+        0,
+        IO_MUX_GPIO25_REG,
+        IO_MUX_GPIO26_REG,
+        IO_MUX_GPIO27_REG,
+        0,
+        0,
+        0,
+        0,
+        IO_MUX_GPIO32_REG,
+        IO_MUX_GPIO33_REG,
+        IO_MUX_GPIO34_REG,
+        IO_MUX_GPIO35_REG,
+        IO_MUX_GPIO36_REG,
+        IO_MUX_GPIO37_REG,
+        IO_MUX_GPIO38_REG,
+        IO_MUX_GPIO39_REG,
+    };
+	const int gpio_num = 0;
+	uint32_t io_reg = GPIO_PIN_MUX_REG[gpio_num];
+    GPIO.enable_w1ts = (0x1 << gpio_num);						//	enable output.
+    gpio_matrix_out(gpio_num, SIG_GPIO_OUT_IDX, false, false);	//	also enable output.
+	PIN_FUNC_SELECT(io_reg, PIN_FUNC_GPIO);						//	select pin func
+	GPIO.out_w1tc = (1 << gpio_num);							//	set level = 0
+	
+	//	normal boot loarder
+	
+	
     // 1. Hardware initialization
     if (bootloader_init() != ESP_OK) {
         bootloader_reset();
