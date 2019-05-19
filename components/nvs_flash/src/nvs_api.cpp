@@ -100,7 +100,7 @@ extern "C" void nvs_dump(const char *partName)
 
 extern "C" esp_err_t nvs_flash_init_custom(const char *partName, uint32_t baseSector, uint32_t sectorCount)
 {
-    ESP_LOGD(TAG, "nvs_flash_init_custom partition=%s start=%d count=%d", partName, baseSector, sectorCount);
+//    ESP_LOGD(TAG, "nvs_flash_init_custom partition=%s start=%d count=%d", partName, baseSector, sectorCount);
 
     nvs::Storage* new_storage = NULL;
     nvs::Storage* storage = lookup_storage_from_name(partName);
