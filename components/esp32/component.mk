@@ -75,3 +75,5 @@ COMPONENT_EXTRA_CLEAN := esp32_out.ld
 # disable stack protection in files which are involved in initialization of that feature
 stack_check.o: CFLAGS := $(filter-out -fstack-protector%, $(CFLAGS))
 cpu_start.o: CFLAGS := $(filter-out -fstack-protector%, $(CFLAGS))
+
+CFLAGS += -D LOG_LOCAL_LEVEL=ESP_LOG_WARN
