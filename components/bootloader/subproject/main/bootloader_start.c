@@ -17,6 +17,7 @@
 
 #include "esp_log.h"
 #include "esp32/rom/gpio.h"
+#include "soc/gpio_pins.h"
 #include "esp32/rom/spi_flash.h"
 #include "bootloader_config.h"
 #include "bootloader_init.h"
